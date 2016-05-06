@@ -1,2 +1,2 @@
 # ApeApi
-Scripting for testing the ApeApi (see http://www.archivesportaleurope.net/information-api)
+Scripting the ApeApi (see http://www.archivesportaleurope.net/information-api) in Python3
