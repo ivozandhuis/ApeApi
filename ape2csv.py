@@ -1,12 +1,13 @@
 #! /usr/bin/env python3
 
 # APE2CSV
-# This Python 3 script handles a query to the API v1 of www.archivesportaleurope.net 
+# This Python3 script handles a query to the API v1 of Archives Portal Europe
+# (see  http://www.archivesportaleurope.net/information-api)
 # ... creates searchresult.csv with the result;
 # ... creates testresult.csv with a log of the request urls, the response size and -time.
 # NB1! This script is originally for testing. Therefor it runs for a maximum of ca. 5 min. 
 # NB2! Put your personal APIkey and query-search-terms from line 17 onwards!
-# Ivo Zandhuis (http://ivozandhuis.nl) 20160426
+# Ivo Zandhuis (http://ivozandhuis.nl) 20160509
 # Licence: CC0
 
 import requests
@@ -27,7 +28,7 @@ def is_json(myjson):
   return True
 
 # endpoint
-base_url = "https://www.archivesportaleurope.net/ApeApi/services"
+base_url = "http://api.archivesportaleurope.net/services"
 
 # create dict header
 header = {}
@@ -76,62 +77,36 @@ while ((i < totalResults) and (t > 0)):
 	totalResults = jsonResultlist['totalResults']	
 	eadSearchResults = jsonResultlist['eadSearchResults']
 	for item in eadSearchResults:
+		# create request detailed info
 		if item['docType'] == 'Descriptive Unit':
-			# create request detailed info
 			service = '/content/descriptiveUnit/'
-			request = item['id']
-			url = base_url + service + request
-			print(url) # print on STOUT for user feedback
-			# do request
-			start = time.time() # start measuring response time
-			r = requests.get(url, headers=header) # do the request
-			end = time.time() # end measuring response time
-			# write log in testresult.csv
-			deltaTime = int((end - start) * 1000)
-			size = sys.getsizeof(r.text)
-			testResult = (i, url, size, deltaTime)
-			wr2.writerow(testResult) # write testresult to testresult.csv
-			t = t - deltaTime
-			# handling response
-			if is_json(r.text):
-				jsonDetails = json.loads(r.text)
-			else:
-				print(r.text)
-				break
-			data = (i,) # create list with result
-			data = data + (jsonDetails['id'],)
-			data = data + (jsonDetails['repository'],)
-			data = data + (jsonDetails['unitId'],)		
-			data = data + (jsonDetails['unitTitle'],)
-			wr1.writerow(data) # write result to searchresult.csv
 		else:
-			# create request detailed info
 			service = '/content/'
-			request = item['id']
-			url = base_url + service + request
-			print(url) # print on STOUT for user feedback
-			# do request
-			start = time.time() # start measuring response time
-			r = requests.get(url, headers=header) # do the request
-			end = time.time() # end measuring response time
-			# write log in testresult.csv
-			deltaTime = int((end - start) * 1000)
-			size = sys.getsizeof(r.text)
-			testResult = (i, url, size, deltaTime)
-			wr2.writerow(testResult) # write testresult to testresult.csv
-			t = t - deltaTime			
-			# handling response
-			if is_json(r.text):
-				jsonDetails = json.loads(r.text)
-			else:
-				print(r.text)
-				break
-			data = (i,) # create list with result
-			data = data + (jsonDetails['id'],)
-			data = data + (jsonDetails['repository'],)
-			data = data + (jsonDetails['unitId'],)
-			data = data + (jsonDetails['unitTitle'],)		
-			wr1.writerow(data) # write result to searchresult.csv
+		request = item['id']
+		url = base_url + service + request
+		print(url) # print on STOUT for user feedback
+		# do request
+		start = time.time() # start measuring response time
+		r = requests.get(url, headers=header) # do the request
+		end = time.time() # end measuring response time
+		# write log in testresult.csv
+		deltaTime = int((end - start) * 1000)
+		size = sys.getsizeof(r.text)
+		testResult = (i, url, size, deltaTime)
+		wr2.writerow(testResult) # write testresult to testresult.csv
+		t = t - deltaTime			
+		# handling response
+		if is_json(r.text):
+			jsonDetails = json.loads(r.text)
+		else:
+			print(r.text)
+			break
+		data = (i,) # create list with result
+		data = data + (jsonDetails['id'],)
+		data = data + (jsonDetails['repository'],)
+		data = data + (jsonDetails['unitId'],)
+		data = data + (jsonDetails['unitTitle'],)		
+		wr1.writerow(data) # write result to searchresult.csv
 		i = i + 1
 
 searchresult.close()
