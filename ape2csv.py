@@ -6,7 +6,7 @@
 # ... creates searchresult.csv with the result;
 # ... creates testresult.csv with a log of the request urls, the response size and -time.
 # NB1! This script is originally for testing. Therefor it runs for a maximum of ca. 5 min. 
-# NB2! Put your personal APIkey and query-search-terms from line 17 onwards!
+# NB2! Put your personal APIkey and query-search-terms from line 19 onwards!
 # Ivo Zandhuis (http://ivozandhuis.nl) 20160509
 # Licence: CC0
 
