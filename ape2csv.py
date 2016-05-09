@@ -28,7 +28,7 @@ def is_json(myjson):
   return True
 
 # endpoint
-base_url = "http://api.archivesportaleurope.net/services"
+base_url = "https://api.archivesportaleurope.net/services"
 
 # create dict header
 header = {}
